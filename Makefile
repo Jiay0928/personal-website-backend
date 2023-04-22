@@ -2,7 +2,7 @@
 build:
 	sam build
 
-build-TodoFunction:
+build-SideProjectFunction:
 	GOOS=linux CGO_ENABLED=0 go build -o $(ARTIFACTS_DIR)/main .
 
 .PHONY: init

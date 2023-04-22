@@ -10,17 +10,10 @@ import (
 )
 
 func router(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	log.Printf("Received req %#v", req)
 
 	switch req.HTTPMethod {
 	case "GET":
 		return processGetProjects(ctx, req)
-	// case "POST":
-	// 	return processPost(ctx, req)
-	// case "DELETE":
-	// 	return processDelete(ctx, req)
-	// case "PUT":
-	// 	return processPut(ctx, req)
 	default:
 		return clientError(http.StatusMethodNotAllowed)
 	}
@@ -49,6 +42,7 @@ func processGetProjects(ctx context.Context, req events.APIGatewayProxyRequest) 
 		return serverError(err)
 	}
 	json, err := json.Marshal(projectList)
+
 	if err != nil {
 		return serverError(err)
 	}

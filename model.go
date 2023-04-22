@@ -5,16 +5,15 @@ import (
 	"context"
 	"log"
 
-	"github.com/aws/aws-sdk-go-v2/aws"
-	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue"
-	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
 const TableName = "side_project"
 
 type SideProject struct {
-	Id         int      `json:"id" dynamodbav:"id"`
 	Title      string   `json:"title" dynamodbav:"title"`
 	Tags       []string `json:"Tags" dynamodbav:"Tags"`
 	Desc       string   `json:"Desc" dynamodbav:"Desc"`
@@ -24,25 +23,23 @@ type SideProject struct {
 	GithubLink string   `json:"GithubLink" dynamodbav:"GithubLink"`
 }
 
-var db dynamodb.Client
-
-func init() {
-	sdkConfig, err := config.LoadDefaultConfig(context.TODO())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	db = *dynamodb.NewFromConfig(sdkConfig)
-}
-
 func getProjects(ctx context.Context) ([]SideProject, error) {
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("us-east-2"),
+	})
+	if err != nil {
+		log.Printf("fail at connection. Result: %#v", err)
+		return nil, err
+	}
+	svc := dynamodb.New(sess)
 
 	input := &dynamodb.ScanInput{
 		TableName: aws.String("side_project"),
 	}
 
 	log.Printf("Calling Dynamodb with input: %v", input)
-	result, err := db.Scan(ctx, input)
+	result, err := svc.Scan(input)
+
 	if err != nil {
 		log.Printf("Executed GetItem DynamoDb successfully. Result: %#v", err)
 		return nil, err
@@ -50,7 +47,7 @@ func getProjects(ctx context.Context) ([]SideProject, error) {
 	projectList := make([]SideProject, len(result.Items))
 	for i, item := range result.Items {
 		project := new(SideProject)
-		err = attributevalue.UnmarshalMap(item, project)
+		err = dynamodbattribute.UnmarshalMap(item, project)
 		if err != nil {
 			return nil, err
 		}

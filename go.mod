@@ -16,9 +16,9 @@ require (
 )
 
 require (
-	github.com/aws/aws-lambda-go v1.40.0 // indirect
-	github.com/aws/aws-sdk-go v1.44.244
-	github.com/aws/aws-sdk-go-v2 v1.17.8 // indirect
+	github.com/aws/aws-lambda-go v1.40.0
+	github.com/aws/aws-sdk-go v1.44.246
+	github.com/aws/aws-sdk-go-v2 v1.17.8
 	github.com/aws/aws-sdk-go-v2/config v1.18.21
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.10.21
 	github.com/aws/aws-sdk-go-v2/internal/configsources v1.1.32 // indirect
@@ -29,7 +29,6 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.12.0 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/leodido/go-urn v1.2.2 // indirect
 	golang.org/x/crypto v0.7.0 // indirect
